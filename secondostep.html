@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decifra il codice</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .fake-message {
+            color: red;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #countdown {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #00ff00;
+        }
+        #base64-hint {
+            display: none;
+            margin-top: 30px;
+            font-size: 18px;
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1>=== TERMINALE ===</h1>
+    <p>ACCESSO CONSENTITO...</p>
+    <p>STATO: SISTEMA ONLINE</p>
+
+    <p id="error-message" class="fake-message">⚠ ERRORE 404: CODICE NON TROVATO ⚠</p>
+    <p id="countdown">Decodifica in corso... Attendere 30 secondi.</p>
+
+    <p id="base64-hint">💡 Congratulazioni, ci sei quasi. Ottieni questo buono Amazon:<strong><br>QVNNLVg3WjEyLTIwTzkwLUFNRDgx</strong><br>Prova a decifrarlo usando <u>base64</u>.</p>
+
+    <script>
+        let seconds = 30;
+        const countdownEl = document.getElementById("countdown");
+        const base64Hint = document.getElementById("base64-hint");
+        const errorMsg = document.getElementById("error-message");
+
+        const countdownInterval = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = `Decodifica in corso... Attendere ${seconds} secondi.`;
+
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                countdownEl.textContent = "Codice criptato individuato.";
+                
+                // Nasconde il messaggio d'errore
+                errorMsg.style.display = "none";
+
+                // Mostra il codice in base64
+                base64Hint.style.display = "block";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
