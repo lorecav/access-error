@@ -17,16 +17,25 @@
             margin-top: 20px;
             font-size: 18px;
         }
-        #countdown {
-            font-size: 18px;
-            margin-top: 20px;
-            color: #00ff00;
-        }
         #base64-hint {
             display: none;
             margin-top: 30px;
             font-size: 18px;
             color: yellow;
+        }
+        #slideshow img {
+            max-width: 50%;
+            margin-top: 10px;
+        }
+        #challenge-message {
+            font-size: 18px;
+            color: orange;
+            margin-bottom: 10px;
+        }
+        #timer {
+            font-size: 16px;
+            color: #ff5555;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -36,31 +45,53 @@
     <p>STATO: SISTEMA ONLINE</p>
 
     <p id="error-message" class="fake-message">⚠ ERRORE 404: CODICE NON TROVATO ⚠</p>
-    <p id="countdown">Decodifica in corso... Attendere 30 secondi.</p>
+
+    <div id="slideshow">
+        <p id="challenge-message">Sbrigati a risolvere questo enigma, altrimenti tutti ti metteranno in imbarazzo. Sei o non sei un SENIOR DEVELOPER?</p>
+        <p id="timer">Tempo rimasto: 60 secondi</p>
+        <img id="slideshow-img" src="" alt="Loading...">
+    </div>
 
     <p id="base64-hint">💡 Congratulazioni, ci sei quasi. Ottieni questo buono Amazon:<strong><br>QVNNLVg3WjEyLTIwTzkwLUFNRDgx</strong><br>Prova a decifrarlo usando <u>base64</u>.</p>
 
     <script>
-        let seconds = 30;
-        const countdownEl = document.getElementById("countdown");
+        const immagini = [
+            "biagio1.png", "biagio2.png", "biagio3.png", "biagio4.png",
+            "biagio5.png", "biagio6.png", "biagio7.png"
+        ];
+        const slideshowImg = document.getElementById("slideshow-img");
+        const slideshowContainer = document.getElementById("slideshow");
         const base64Hint = document.getElementById("base64-hint");
         const errorMsg = document.getElementById("error-message");
+        const timerText = document.getElementById("timer");
 
-        const countdownInterval = setInterval(() => {
-            seconds--;
-            countdownEl.textContent = `Decodifica in corso... Attendere ${seconds} secondi.`;
+        let secondsLeft = 60;
+        let currentImageIndex = 0;
 
-            if (seconds <= 0) {
-                clearInterval(countdownInterval);
-                countdownEl.textContent = "Codice criptato individuato.";
-                
-                // Nasconde il messaggio d'errore
+        // Cambia immagine ogni mezzo secondo
+        const imageInterval = setInterval(() => {
+            slideshowImg.src = immagini[currentImageIndex];
+            currentImageIndex = (currentImageIndex + 1) % immagini.length;
+        }, 500);
+
+        // Timer countdown ogni 1 secondo
+        const timerInterval = setInterval(() => {
+            timerText.textContent = `Tempo rimasto: ${secondsLeft} secondi`;
+            secondsLeft--;
+
+            if (secondsLeft < 0) {
+                clearInterval(timerInterval);
+                clearInterval(imageInterval);
+
+                // Nascondi tutto tranne il codice
+                slideshowContainer.style.display = "none";
                 errorMsg.style.display = "none";
-
-                // Mostra il codice in base64
                 base64Hint.style.display = "block";
             }
         }, 1000);
+
+        // Avvia con la prima immagine
+        slideshowImg.src = immagini[0];
     </script>
 </body>
 </html>
